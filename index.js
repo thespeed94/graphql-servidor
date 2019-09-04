@@ -9,20 +9,34 @@ app.get('/', (req, res) => {
     res.send('Todo Listo');
 });
 
-
-// el resolver
-const root = {cliente: () => {
-    return {
-        "id": 12165161616165,
-        "nombre": "David",
-        "apellido": "Arrarte",
-        "empresa": "Banexcoin",
-        "emails": [
-            {email: "david.arrarte@banexcoin.com"},
-            {email: "correo@banexcoin.com"}
-        ]
+const clientesDB = {};
+class Cliente {
+    constructor(id, {nombre, apellido, empresa, email}){
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.empresa = empresa;
+        this.mail = mail;
     }
-}}
+}
+// el resolver
+const root = {
+    cliente: () => {
+        return {
+            "id": 12165161616165,
+            "nombre": "David",
+            "apellido": "Arrarte",
+            "empresa": "Banexcoin",
+            "email": "david.arrarte@banexcoin.com"
+        }
+    },
+    crearCliente : ({input}) => {
+        const id = require('crypto').randomBytes(10).toString('hex');
+        clientesDB[id] = input;
+        return new Cliente(id, input)
+
+    }
+};
 
 app.use('/graphql', graphqlHTTP({
     // que schema va a utilizar
